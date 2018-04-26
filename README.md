@@ -1,0 +1,1 @@
+# Psns.Common.Functional [![NuGet Version](http://img.shields.io/nuget/v/Psns.Common.Functional.svg?style=flat)](https://www.nuget.org/packages/Psns.Common.Functional/) [![NuGet Downloads](http://img.shields.io/nuget/dt/Psns.Common.Functional.svg?style=flat)](https://www.nuget.org/packages/Psns.Common.Functional/)

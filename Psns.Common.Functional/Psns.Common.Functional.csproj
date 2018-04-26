@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>Functional Monads PSNS</PackageTags>
+    <PackageLicenseUrl>https://github.com/PSNS-IMF/functional/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/PSNS-IMF/functional</PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <Description>Contains some functional helpers methods and Monads</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Psns.Common.Build.GithubTemplate" Version="1.0.0.6" />
+  </ItemGroup>
+
+</Project>
