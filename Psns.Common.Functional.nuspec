@@ -21,4 +21,7 @@
       </group>
     </dependencies>
   </metadata>
+  <files>
+    <file src="Psns.Common.Functional\bin\$configuration$\Psns.Common.Functional.*" target="lib" exclude="**\*.dll.config;**\*Tests*;**\*Test*" />
+  </files>
 </package>
