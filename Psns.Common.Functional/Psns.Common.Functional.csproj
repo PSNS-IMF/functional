@@ -15,6 +15,10 @@
     <DocumentationFile>bin\Release\netstandard1.0\Psns.Common.Functional.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.0\Psns.Common.Functional.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Psns.Common.Build.GithubTemplate" Version="1.0.0.6" />
   </ItemGroup>
