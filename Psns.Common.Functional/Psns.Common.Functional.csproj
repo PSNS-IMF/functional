@@ -11,6 +11,10 @@
     <Description>Contains some functional helpers methods and Monads</Description>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.0\Psns.Common.Functional.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Psns.Common.Build.GithubTemplate" Version="1.0.0.6" />
   </ItemGroup>
