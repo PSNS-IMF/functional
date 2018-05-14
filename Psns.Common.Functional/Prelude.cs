@@ -76,56 +76,6 @@ namespace Psns.Common.Functional
                 ? Some(map(value))
                 : Maybe<R>.None;
 
-        public static R Use<T, R>(T disposable, Func<T, R> user) where T : IDisposable =>
-            Use(() => disposable, user);
-
-        public static R Use<T, R>(Func<T> factory, Func<T, R> user) where T : IDisposable
-        {
-            var disposable = factory();
-
-            try
-            {
-                var result = user(disposable);
-                return result;
-            }
-            finally
-            {
-                disposable.Dispose();
-            }
-        }
-
-        public static async Task<R> UseAsync<T, R>(T disposable, Func<T, Task<R>> user) where T : IDisposable =>
-            await UseAsync(() => disposable, user);
-
-        public static async Task<R> UseAsync<T, R>(Func<T> factory, Func<T, Task<R>> user) where T : IDisposable
-        {
-            var disposable = factory();
-
-            try
-            {
-                return await user(disposable);
-            }
-            finally
-            {
-                disposable.Dispose();
-            }
-        }
-
-        public static Try<R> TryUse<T, R>(Func<T> factory, Func<T, R> user) where T : IDisposable =>
-            Try(factory).Bind(val => Use(val, user));
-
-        public static Try<R> TryUse<T, R>(Func<T> factory, Func<T, Try<R>> user) where T : IDisposable =>
-            Try(factory).Bind(val => Use(val, _ => user(val).Try()));
-
-        public static TryAsync<R> TryUse<T, R>(Func<T> factory, Func<T, Task<R>> user) where T : IDisposable =>
-            Try(factory)
-                .Bind(val => TryAsync(() => UseAsync(val, user)));
-
-        public static TryAsync<R> TryUse<T, R>(Func<T> factory, Func<T, TryAsync<R>> user) where T : IDisposable => async () =>
-            await Try(factory)
-                .Bind(async val => await UseAsync(val, v => user(v).TryAsync()))
-                .Match(task => task, ex => new TryResult<R>(ex).AsTask());
-
         /// <summary>
         /// Checks for null value
         /// </summary>
@@ -151,5 +101,33 @@ namespace Psns.Common.Functional
         public static Func<T1, R> fun<T1, R>(Func<T1, R> f) => f;
 
         public static Func<T1, T2, R> fun<T1, T2, R>(Func<T1, T2, R> f) => f;
+
+        /// <summary>
+        /// Throws an <see cref="Exception"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="message">The message to be used for the <see cref="Exception"/></param>
+        /// <returns></returns>
+        public static T failwith<T>(string message)
+        {
+            throw new Exception(message);
+        }
+
+        /// <summary>
+        /// Throws a given <see cref="Exception"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ex"></param>
+        /// <returns></returns>
+        public static T raise<T>(Exception ex)
+        {
+            throw ex;
+        }
+
+        /// <summary>
+        /// Create a function that returns a <see cref="Task"/> that does nothing.
+        /// </summary>
+        public static Func<Task> UnitTask => () =>
+            Task.Delay(0);
     }
 }

@@ -22,6 +22,9 @@ namespace Psns.Common.Functional
         public static Func<T3, R> Par<T1, T2, T3, R>(this Func<T1, T2, T3, R> self, T1 t1, T2 t2) => t3 =>
             self(t1, t2, t3);
 
+        public static Func<R> Par<T1, T2, T3, R>(this Func<T1, T2, T3, R> self, T1 t1, T2 t2, T3 t3) => () =>
+            self(t1, t2, t3);
+
         public static Func<T3, T4, R> Par<T1, T2, T3, T4, R>(this Func<T1, T2, T3, T4, R> self, T1 t1, T2 t2) => (T3 t3, T4 t4) =>
             self(t1, t2, t3, t4);
 
