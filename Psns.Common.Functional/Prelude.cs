@@ -129,5 +129,8 @@ namespace Psns.Common.Functional
         /// </summary>
         public static Func<Task> UnitTask => () =>
             Task.Delay(0);
+
+        public static int random(int max) =>
+            new Random().Next(max);
     }
 }

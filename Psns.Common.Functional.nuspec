@@ -8,6 +8,10 @@
     <licenseUrl>https://github.com/PSNS-IMF/functional/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/PSNS-IMF/functional</projectUrl>
     <releaseNotes>
+      ## 1.0.0.2
+      ### Features
+      * Add more helpers
+
       ## 1.0.0.1
       ### Features
       * Adding more helper functions

@@ -221,6 +221,11 @@ namespace Psns.Common.Functional
         public static async Task<S> Match<T, R, S>(this TryAsync<T> self, Func<T, R> success, Func<Exception, R> fail, Func<R, S> onEither) =>
             Map(await self.Match(success, fail), r => onEither(r));
 
+        public static Either<Exception, T> ToEither<T>(this Try<T> self) =>
+            self.Match(
+                success: t => t,
+                fail: ex => Left<Exception, T>(ex));
+
         public static Task<Either<Exception, T>> ToEither<T>(this TryAsync<T> self) =>
             self.Match(
                 val => Right<Exception, T>(val),

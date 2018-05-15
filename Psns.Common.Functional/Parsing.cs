@@ -9,5 +9,14 @@
                 ? Some(parsed)
                 : None;
         }
+
+        public static Maybe<long> ParseLong(string value)
+        {
+            long l;
+
+            return long.TryParse(value, out l)
+                ? Some(l)
+                : None;
+        }
     }
 }

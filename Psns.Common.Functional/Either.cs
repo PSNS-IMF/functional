@@ -51,6 +51,12 @@ namespace Psns.Common.Functional
                 }
             }
         }
+
+        public static Either<LRes, R> MapLeft<L, R, LRes>(this Either<L, R> self, Func<L, LRes> mapper) =>
+            self.Match(right: r => Right<LRes, R>(r), left: l => mapper(l));
+
+        public static Either<L, Ret> MapRight<L, R, Ret>(this Either<L, R> self, Func<R, Ret> mapper) =>
+            self.Match(right: r => mapper(r), left: l => Left<L, Ret>(l));
     }
 
     public struct Either<L, R>

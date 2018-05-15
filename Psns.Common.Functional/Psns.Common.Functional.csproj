@@ -9,8 +9,8 @@
     <PackageProjectUrl>https://github.com/PSNS-IMF/functional</PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <Description>Contains some functional helpers methods and Monads</Description>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+    <FileVersion>1.0.0.2</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
