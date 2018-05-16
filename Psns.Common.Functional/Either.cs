@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Psns.Common.Functional
 {
@@ -57,6 +58,11 @@ namespace Psns.Common.Functional
 
         public static Either<L, Ret> MapRight<L, R, Ret>(this Either<L, R> self, Func<R, Ret> mapper) =>
             self.Match(right: r => mapper(r), left: l => Left<L, Ret>(l));
+
+        public static TryAsync<R> AsTry<R>(this Task<Either<Exception, R>> self) => async () =>
+            (await self).Match(
+                right: r => r,
+                left: ex => raise<R>(ex));
     }
 
     public struct Either<L, R>

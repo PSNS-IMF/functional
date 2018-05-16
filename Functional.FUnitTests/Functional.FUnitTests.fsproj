@@ -52,7 +52,6 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Library1.fs" />
     <Compile Include="EitherTests.fs" />
     <Compile Include="MatchingTests.fs" />
     <Compile Include="ParsingTests.fs" />
@@ -60,6 +59,8 @@
     <Content Include="packages.config" />
     <None Include="Foq.Usage.fsx" />
     <None Include="Script.fsx" />
+    <Compile Include="IEnumerableTests.fs" />
+    <Compile Include="PreludeTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Foq">

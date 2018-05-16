@@ -8,6 +8,12 @@
     <licenseUrl>https://github.com/PSNS-IMF/functional/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/PSNS-IMF/functional</projectUrl>
     <releaseNotes>
+      ## 1.0.0.3
+	  ### Features
+	  * Adding more helpers
+      ### Bug fixes
+      * Fixing bug in IEnumerable Match function
+
       ## 1.0.0.2
       ### Features
       * Add more helpers

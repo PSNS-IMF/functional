@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -132,5 +133,8 @@ namespace Psns.Common.Functional
 
         public static int random(int max) =>
             new Random().Next(max);
+
+        public static IEnumerable<int> range(int start, int count) =>
+            Enumerable.Range(start, count);
     }
 }

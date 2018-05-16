@@ -20,8 +20,8 @@ namespace Psns.Common.Functional
         /// <returns></returns>
         public static R Match<T, R>(this IEnumerable<T> self, Func<R> empty, Func<T, IEnumerable<T>, R> more) =>
             self.Any()
-                ? empty()
-                : more(self.First(), self);
+                ? more(self.First(), self)
+                : empty();
 
         /// <summary>
         /// Add a <typeparamref name="T"/> to the end of <paramref name="self"/>.

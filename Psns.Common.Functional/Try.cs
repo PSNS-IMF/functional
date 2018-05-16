@@ -6,6 +6,18 @@ namespace Psns.Common.Functional
 {
     public static partial class Prelude
     {
+        public static Try<T> OfTry<T>() => () =>
+            default(T);
+
+        public static Try<T> ToTry<T>(this T self) => () =>
+            self;
+
+        public static TryAsync<T> OfTryAsync<T>() => async () =>
+            await default(T).AsTask();
+
+        public static TryAsync<T> ToTryAsync<T>(this T self) => async () =>
+            await self.AsTask();
+
         public static Try<T> Try<T>(Func<T> tryDel) => () => 
             tryDel();
 
@@ -23,6 +35,12 @@ namespace Psns.Common.Functional
 
         public static TryAsync<T> FailAsync<T>(Exception e) => () =>
             new TryResult<T>(e).AsTask();
+
+        public static Try<T> FailWith<T>(string s) => () =>
+            new TryResult<T>(new Exception(s));
+
+        public static TryAsync<T> FailWithAsync<T>(string s) => () =>
+            new TryResult<T>(new Exception(s)).AsTask();
     }
 
     public delegate TryResult<T> Try<T>();
@@ -67,6 +85,11 @@ namespace Psns.Common.Functional
 
     public static class TryExtensions
     {
+        public static Try<T> Append<T>(this Try<T> self, Try<T> other) =>
+            self.Match(
+                success: t => other,
+                fail: ex => Fail<T>(ex));
+
         public static Try<R> Bind<T, R>(this Try<T> self, Func<T, Try<R>> binder) => () =>
             Map(self.Try(), res => res.IsFailure
                 ? new TryResult<R>(res.Exception)
