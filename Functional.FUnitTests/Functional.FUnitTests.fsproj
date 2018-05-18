@@ -61,6 +61,7 @@
     <None Include="Script.fsx" />
     <Compile Include="IEnumerableTests.fs" />
     <Compile Include="PreludeTests.fs" />
+    <Compile Include="StateTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Foq">
