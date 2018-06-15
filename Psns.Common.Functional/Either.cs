@@ -12,6 +12,15 @@ namespace Psns.Common.Functional
         public static Either<L, R> Left<L, R>(L left) =>
             Either<L, R>.Left<L, R>(left);
 
+        public static Either<Exception, R> Ok<R>(this R self) =>
+            Right<Exception, R>(self);
+
+        public static Either<Exception, R> Error<R>(string errorMessage) =>
+            Left<Exception, R>(new Exception(errorMessage));
+
+        public static Either<Exception, R> Error<R>(Exception error) =>
+            Left<Exception, R>(error);
+
         public static TryAsync<R> Bind<T, R>(this Either<Exception, T> self, Func<T, TryAsync<R>> binder) => () =>
             self.Match(
                 t => binder(t).TryAsync(),
