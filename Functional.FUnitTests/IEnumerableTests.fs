@@ -27,3 +27,11 @@ let ``it should append an item to the end.`` () =
 [<Test>]
 let ``it should prepend an item to the beginning.`` () =
     int(7).Cons(vals) |> should equal [7;1;5;2]
+
+[<Test>]
+let ``it should append a some to the end.`` () =
+    (seq ["1";"2"]).Append(ex.Possible("3")) |> should equal (seq ["1";"2";"3"])
+
+[<Test>]
+let ``it should not append a none to the end.`` () =
+    (seq ["1";"2"]).Append(Maybe<string>.None) |> should equal (seq ["1";"2"])

@@ -63,5 +63,13 @@ namespace SystemExtensions.UnitTests.Functional
 
         string Resolve<T>(Maybe<T> m) =>
             m.Match(_ => "some", () => "none");
+
+        [Test]
+        public void Mapping_WithSome_MapperCalled() =>
+            Expect(Some("val").Map(v => 1).Match(i => i, () => 0), EqualTo(1));
+
+        [Test]
+        public void Mapping_WithNone_MapperNotCalled() =>
+            Expect(Maybe<string>.None.Map(v => 1).Match(i => i, () => 0), EqualTo(0));
     }
 }
