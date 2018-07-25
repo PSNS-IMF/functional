@@ -8,6 +8,10 @@
     <licenseUrl>https://github.com/PSNS-IMF/functional/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/PSNS-IMF/functional</projectUrl>
     <releaseNotes>
+      ## 1.0.0.6
+      ### Features
+      * Adding State Monad
+
       ## 1.0.0.5
       ### Features
       * Adding more helpers

@@ -21,14 +21,14 @@ namespace Psns.Common.Functional
         public static State<TResult, TState> Bind<TValue, TResult, TState>(
             this State<TValue, TState> self,
             Func<TValue, State<TResult, TState>> binder) => state => 
-                Map(self(state), res => binder(res.Value)(res.State));
+                map(self(state), res => binder(res.Value)(res.State));
 
         public static State<TResult, TState> SelectMany<TSource, TState, TSelector, TResult>(
             this State<TSource, TState> self,
             Func<TSource, State<TSelector, TState>> selector,
             Func<TSource, TSelector, TResult> resultSelector) => state =>
-                Map(self(state), sourceRes =>
-                    Map(selector(sourceRes.Value)(sourceRes.State), selectorRes =>
+                map(self(state), sourceRes =>
+                    map(selector(sourceRes.Value)(sourceRes.State), selectorRes =>
                         resultSelector(sourceRes.Value, selectorRes.Value)
                             .State<TResult, TState>()(selectorRes.State)));
 
