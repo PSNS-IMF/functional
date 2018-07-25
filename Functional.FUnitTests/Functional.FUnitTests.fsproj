@@ -61,7 +61,6 @@
     <None Include="Script.fsx" />
     <Compile Include="IEnumerableTests.fs" />
     <Compile Include="PreludeTests.fs" />
-    <Compile Include="StateTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Foq">
@@ -81,8 +80,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.ValueTuple">
-      <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

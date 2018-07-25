@@ -32,6 +32,7 @@
     <dependencies>
       <group targetFramework=".NETStandard1.0">
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+        <dependency id="System.ValueTuple" version="4.5.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

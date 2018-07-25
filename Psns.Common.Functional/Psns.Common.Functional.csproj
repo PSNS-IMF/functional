@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0</TargetFrameworks>
@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Psns.Common.Build.GithubTemplate" Version="1.0.0.6" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
 </Project>
