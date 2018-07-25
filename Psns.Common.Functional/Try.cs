@@ -91,22 +91,22 @@ namespace Psns.Common.Functional
                 fail: ex => Fail<T>(ex));
 
         public static Try<R> Bind<T, R>(this Try<T> self, Func<T, Try<R>> binder) => () =>
-            Map(self.Try(), res => res.IsFailure
+            map(self.Try(), res => res.IsFailure
                 ? new TryResult<R>(res.Exception)
                 : binder(res.Value).Try());
 
         public static Try<T> Bind<T>(this Try<T> self, Try<UnitValue> binder) => () =>
-            Map(self.Try(), res => res.IsFailure
+            map(self.Try(), res => res.IsFailure
                 ? res.Exception
-                : Map(binder(), _ => res));
+                : map(binder(), _ => res));
 
         public static Try<R> Bind<T, R>(this Try<T> self, Func<T, R> binder) => () =>
-            Map(self.Try(), res => res.IsFailure
+            map(self.Try(), res => res.IsFailure
                 ? res.Exception
                 : Prelude.Try(() => binder(res.Value)).Try());
 
         public static Try<R> Bind<T, R>(this Try<T> self, Func<T, TryResult<R>> binder) => () =>
-            Map(self.Try(), res => res.IsFailure
+            map(self.Try(), res => res.IsFailure
                 ? res.Exception
                 : binder(res.Value));
 
@@ -122,19 +122,19 @@ namespace Psns.Common.Functional
         ///         if self fails, self's exception; 
         ///         otherwise, binder's exception.</returns>
         public static Try<R> Regardless<T, R>(this Try<T> self, Try<R> binder) => () =>
-            Map(self.Try(), res =>
-                Map(binder(), r => r.IsFailure
+            map(self.Try(), res =>
+                map(binder(), r => r.IsFailure
                     ? new TryResult<R>(r.Exception)
                     : res.IsFailure ? new TryResult<R>(res.Exception) : r));
 
         public static TryAsync<R> Bind<T, R>(this Try<T> self, Func<T, TryAsync<R>> binder) => async () =>
-            await Map(self.Try(), async res => res.IsFailure
+            await map(self.Try(), async res => res.IsFailure
                 ? res.Exception
                 : await binder(res.Value).TryAsync());
 
         public static Try<T> Regardless<T>(this Try<T> self, Try<UnitValue> binder) => () =>
-            Map(self.Try(), res =>
-                Map(binder(), r => r.IsFailure 
+            map(self.Try(), res =>
+                map(binder(), r => r.IsFailure 
                     ? new TryResult<T>(r.Exception)
                     : res));
 
@@ -143,10 +143,10 @@ namespace Psns.Common.Functional
             Func<T, Try<R>> binder,
             Func<R, bool> predicate,
             Func<T, R> falseMap) => () =>
-                Map(self.Try(), selfRes =>
+                map(self.Try(), selfRes =>
                     selfRes.IsFailure
                         ? new TryResult<R>(selfRes.Exception)
-                        : Map(binder(selfRes.Value).Try(), bindRes =>
+                        : map(binder(selfRes.Value).Try(), bindRes =>
                             bindRes.IsFailure
                                 ? new TryResult<R>(bindRes.Exception)
                                 : predicate(bindRes.Value)
@@ -154,35 +154,35 @@ namespace Psns.Common.Functional
                                     : falseMap(selfRes.Value)));
 
         public static TryAsync<R> Bind<T, R>(this TryAsync<T> self, Func<T, TryAsync<R>> binder) => async () =>
-            await Map(await self.TryAsync(), async res => res.IsFailure
+            await map(await self.TryAsync(), async res => res.IsFailure
                 ? res.Exception
                 : await binder(res.Value).TryAsync());
 
         public static TryAsync<R> Bind<T, R>(this TryAsync<T> self, Func<T, Task<R>> binder) => async () =>
-            await Map(await self.TryAsync(), async res => res.IsFailure
+            await map(await self.TryAsync(), async res => res.IsFailure
                 ? res.Exception
                 : await Prelude.TryAsync(() => binder(res.Value)).TryAsync());
 
         public static TryAsync<T> Bind<T>(this TryAsync<T> self, TryAsync<UnitValue> binder) => async () =>
-            await Map(await self.TryAsync(), async res => res.IsFailure
+            await map(await self.TryAsync(), async res => res.IsFailure
                 ? res.Exception
-                : Map(await binder(), _ => res));
+                : map(await binder(), _ => res));
 
         public static TryAsync<R> Bind<T, R>(this TryAsync<T> self, Func<T, Task<Either<Exception, R>>> binder) => async () =>
-            await Map(await self.TryAsync(), async res =>
+            await map(await self.TryAsync(), async res =>
                 res.IsFailure
                     ? res.Exception
                     : await binder(res.Value));
 
         public static TryAsync<R> Regardless<T, R>(this TryAsync<T> self, TryAsync<R> binder) => async () =>
-            await Map(await self.TryAsync(), async res =>
-                Map(await binder.TryAsync(), r => r.IsFailure
+            await map(await self.TryAsync(), async res =>
+                map(await binder.TryAsync(), r => r.IsFailure
                     ? new TryResult<R>(r.Exception)
                     : res.IsFailure ? new TryResult<R>(res.Exception) : r));
 
         public static TryAsync<T> Regardless<T>(this TryAsync<T> self, TryAsync<UnitValue> binder) => async () =>
-            await Map(await self.TryAsync(), async res => 
-                Map(await binder.TryAsync(), r => r.IsFailure 
+            await map(await self.TryAsync(), async res => 
+                map(await binder.TryAsync(), r => r.IsFailure 
                     ? new TryResult<T>(r.Exception) 
                     : res));
 
@@ -191,10 +191,10 @@ namespace Psns.Common.Functional
             Func<T, TryAsync<R>> binder,
             Func<R, bool> predicate,
             Func<T, R> falseMap) => async () =>
-                await Map(await self.TryAsync(), async selfRes =>
+                await map(await self.TryAsync(), async selfRes =>
                     selfRes.IsFailure
                         ? new TryResult<R>(selfRes.Exception)
-                        : Map(await binder(selfRes.Value).TryAsync(), bindRes =>
+                        : map(await binder(selfRes.Value).TryAsync(), bindRes =>
                             bindRes.IsFailure
                                 ? new TryResult<R>(bindRes.Exception)
                                 : predicate(bindRes.Value)
@@ -226,7 +226,7 @@ namespace Psns.Common.Functional
         }
 
         public static R Match<T, R>(this Try<T> self, Func<T, R> success, Func<Exception, R> fail) =>
-            Map(self.Try(), res => res.IsFailure
+            map(self.Try(), res => res.IsFailure
                 ? fail(res.Exception)
                 : success(res.Value));
 
@@ -234,15 +234,15 @@ namespace Psns.Common.Functional
             self.Match(t => { success(t); return Unit; }, e => { fail(e); return Unit; });
 
         public static S Match<T, R, S>(this Try<T> self, Func<T, R> success, Func<Exception, R> fail, Func<R, S> onEither) =>
-            Map(self.Match(success, fail), r => onEither(r));
+            map(self.Match(success, fail), r => onEither(r));
 
         public static async Task<R> Match<T, R>(this TryAsync<T> self, Func<T, R> success, Func<Exception, R> fail) =>
-            Map(await self.TryAsync(), res => res.IsFailure
+            map(await self.TryAsync(), res => res.IsFailure
                 ? fail(res.Exception)
                 : success(res.Value));
 
         public static async Task<S> Match<T, R, S>(this TryAsync<T> self, Func<T, R> success, Func<Exception, R> fail, Func<R, S> onEither) =>
-            Map(await self.Match(success, fail), r => onEither(r));
+            map(await self.Match(success, fail), r => onEither(r));
 
         public static Either<Exception, T> ToEither<T>(this Try<T> self) =>
             self.Match(

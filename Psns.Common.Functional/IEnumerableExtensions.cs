@@ -37,5 +37,17 @@ namespace Psns.Common.Functional
 
             yield return tail;
         }
+
+        /// <summary>
+        /// Add a <see cref="Maybe{T}"/> to the end of <paramref name="self"/> if it has a value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="self"></param>
+        /// <param name="possibleTail"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Append<T>(this IEnumerable<T> self, Maybe<T> possibleTail) =>
+            possibleTail.Match(
+                some: t => self.Append(tail: t),
+                none: () => self);
     }
 }

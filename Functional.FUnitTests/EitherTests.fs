@@ -23,3 +23,11 @@ let ``it should return empty Rights.`` () =
 let ``it should convert to a Try when asynchronous.`` () =
     (ex.Right<exn, int> 1).AsTask().AsTry().Match((fun i -> i), (fun _ -> -1)).Result |> should equal 1
     (ex.Left<exn, int> (exn "fail")).AsTask().AsTry().Match((fun _ -> "ok"), (fun e -> e.Message)).Result |> should equal "fail"
+
+[<Test>]
+let ``it should create the correct Either->Right from an object.`` () =
+    "ok".Ok().Match((fun s -> s), (fun e -> e.Message)) |> should equal "ok"
+
+[<Test>]
+let ``it should create the correct Either from a error string.`` () =
+    ex.Error<obj>("fail").Match((fun o ->  o |> string), (fun e -> e.Message)) |> should equal "fail"

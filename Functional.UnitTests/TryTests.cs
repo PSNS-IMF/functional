@@ -109,7 +109,7 @@ namespace SystemExtensions.UnitTests.Functional
             var disposable = new Disposable();
             var user = fun((Disposable d) => { Expect(d.Disposed, False); return "ok"; });
 
-            var result = TryUse(() => disposable, user).Match(s => s, ex => "fail");
+            var result = TryUse(() => disposable, user).ToEither().Match(s => s, ex => "fail");
 
             Expect(result, EqualTo("ok"));
             Expect(disposable.Disposed, True);
@@ -170,9 +170,8 @@ namespace SystemExtensions.UnitTests.Functional
                     if (disposing)
                     {
                         // TODO: dispose managed state (managed objects).
+                        Disposed = true;
                     }
-
-                    Disposed = true;
                 }
             }
 
@@ -198,7 +197,7 @@ namespace SystemExtensions.UnitTests.Functional
             fail<string>();
 
         public static async Task<T> withDelay<T>(T val, params Action<T>[] actions) =>
-            await Map(val, async _ =>
+            await map(val, async _ =>
             {
                 await Task.Delay(500);
 

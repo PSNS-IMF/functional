@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using static Psns.Common.Functional.Prelude;
 
 namespace Psns.Common.Functional
@@ -13,16 +12,6 @@ namespace Psns.Common.Functional
 
         public static MaybeNone None =>
             MaybeNone.Default;
-
-        public static bool IsNull<T>(T value) =>
-            value == null
-                || (Nullable.GetUnderlyingType(typeof(T)) != null && value.Equals(default(T)));
-
-        public static bool IsDefault<T>(T value) =>
-            EqualityComparer<T>.Default.Equals(value, default(T));
-
-        public static UnitValue Match<T>(this Maybe<T> self, Action<T> some, Action none) =>
-            self.Match(t => { some(t); return Unit; }, () => { none(); return Unit; });
     }
 
     public struct Maybe<T>
@@ -126,5 +115,16 @@ namespace Psns.Common.Functional
         public static MaybeNone Default = new MaybeNone();
 
         public override string ToString() => "None";
+    }
+
+    public static class MaybeExtensions
+    {
+        public static UnitValue Match<T>(this Maybe<T> self, Action<T> some, Action none) =>
+            self.Match(t => { some(t); return Unit; }, () => { none(); return Unit; });
+
+        public static Maybe<R> Map<T, R>(this Maybe<T> self, Func<T, R> mapper) =>
+            self.Match(
+                some: t => mapper(t),
+                none: () => Maybe<R>.None);
     }
 }

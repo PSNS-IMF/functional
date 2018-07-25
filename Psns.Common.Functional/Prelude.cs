@@ -8,10 +8,17 @@ namespace Psns.Common.Functional
 {
     public static partial class Prelude
     {
-        public static R Map<T, R>(T value, Func<T, R> map) =>
+        public static bool IsNull<T>(T value) =>
+            value == null
+                || (Nullable.GetUnderlyingType(typeof(T)) != null && value.Equals(default(T)));
+
+        public static bool IsDefault<T>(T value) =>
+            EqualityComparer<T>.Default.Equals(value, default(T));
+
+        public static R map<T, R>(T value, Func<T, R> map) =>
             map(value);
 
-        public static R Map<T, R>(T value, Action<T> with, R res = default(R))
+        public static R map<T, R>(T value, Action<T> with, R res = default(R))
         {
             if (value != null)
                 with(value);
@@ -30,7 +37,7 @@ namespace Psns.Common.Functional
         }
 
         public static async Task<T> TapAsync<T>(this T value, CancellationToken? cancelToken = null, params Action<T>[] actions) =>
-            await Map(cancelToken ?? Task.Factory.CancellationToken, async token =>
+            await map(cancelToken ?? Task.Factory.CancellationToken, async token =>
                 await Task.Run(async () =>
                 {
                     foreach (var action in actions)
