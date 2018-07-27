@@ -21,14 +21,14 @@ namespace Psns.Common.Functional
         public static Try<T> Try<T>(Func<T> tryDel) => () => 
             tryDel();
 
-        public static Try<UnitValue> Try(Action attempt) => () => 
-            { attempt(); return Unit; };
+        public static Try<Unit> Try(Action attempt) => () => 
+            { attempt(); return unit; };
 
         public static TryAsync<T> TryAsync<T>(Func<Task<T>> tryDel) => async () => 
             new TryResult<T>(await tryDel());
 
-        public static TryAsync<UnitValue> TryAsync(Func<Task> tryDel) => async () =>
-            { await tryDel(); return Unit; };
+        public static TryAsync<Unit> TryAsync(Func<Task> tryDel) => async () =>
+            { await tryDel(); return unit; };
 
         public static Try<T> Fail<T>(Exception e) => () =>
             new TryResult<T>(e);
@@ -95,7 +95,7 @@ namespace Psns.Common.Functional
                 ? new TryResult<R>(res.Exception)
                 : binder(res.Value).Try());
 
-        public static Try<T> Bind<T>(this Try<T> self, Try<UnitValue> binder) => () =>
+        public static Try<T> Bind<T>(this Try<T> self, Try<Unit> binder) => () =>
             map(self.Try(), res => res.IsFailure
                 ? res.Exception
                 : map(binder(), _ => res));
@@ -132,7 +132,7 @@ namespace Psns.Common.Functional
                 ? res.Exception
                 : await binder(res.Value).TryAsync());
 
-        public static Try<T> Regardless<T>(this Try<T> self, Try<UnitValue> binder) => () =>
+        public static Try<T> Regardless<T>(this Try<T> self, Try<Unit> binder) => () =>
             map(self.Try(), res =>
                 map(binder(), r => r.IsFailure 
                     ? new TryResult<T>(r.Exception)
@@ -163,7 +163,7 @@ namespace Psns.Common.Functional
                 ? res.Exception
                 : await Prelude.TryAsync(() => binder(res.Value)).TryAsync());
 
-        public static TryAsync<T> Bind<T>(this TryAsync<T> self, TryAsync<UnitValue> binder) => async () =>
+        public static TryAsync<T> Bind<T>(this TryAsync<T> self, TryAsync<Unit> binder) => async () =>
             await map(await self.TryAsync(), async res => res.IsFailure
                 ? res.Exception
                 : map(await binder(), _ => res));
@@ -180,7 +180,7 @@ namespace Psns.Common.Functional
                     ? new TryResult<R>(r.Exception)
                     : res.IsFailure ? new TryResult<R>(res.Exception) : r));
 
-        public static TryAsync<T> Regardless<T>(this TryAsync<T> self, TryAsync<UnitValue> binder) => async () =>
+        public static TryAsync<T> Regardless<T>(this TryAsync<T> self, TryAsync<Unit> binder) => async () =>
             await map(await self.TryAsync(), async res => 
                 map(await binder.TryAsync(), r => r.IsFailure 
                     ? new TryResult<T>(r.Exception) 
@@ -230,8 +230,8 @@ namespace Psns.Common.Functional
                 ? fail(res.Exception)
                 : success(res.Value));
 
-        public static UnitValue Match<T>(this Try<T> self, Action<T> success, Action<Exception> fail) =>
-            self.Match(t => { success(t); return Unit; }, e => { fail(e); return Unit; });
+        public static Unit Match<T>(this Try<T> self, Action<T> success, Action<Exception> fail) =>
+            self.Match(t => { success(t); return unit; }, e => { fail(e); return unit; });
 
         public static S Match<T, R, S>(this Try<T> self, Func<T, R> success, Func<Exception, R> fail, Func<R, S> onEither) =>
             map(self.Match(success, fail), r => onEither(r));

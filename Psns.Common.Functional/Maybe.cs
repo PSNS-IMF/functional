@@ -119,8 +119,8 @@ namespace Psns.Common.Functional
 
     public static class MaybeExtensions
     {
-        public static UnitValue Match<T>(this Maybe<T> self, Action<T> some, Action none) =>
-            self.Match(t => { some(t); return Unit; }, () => { none(); return Unit; });
+        public static Unit Match<T>(this Maybe<T> self, Action<T> some, Action none) =>
+            self.Match(t => { some(t); return unit; }, () => { none(); return unit; });
 
         public static Maybe<R> Map<T, R>(this Maybe<T> self, Func<T, R> mapper) =>
             self.Match(

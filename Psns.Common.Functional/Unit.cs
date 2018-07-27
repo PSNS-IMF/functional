@@ -2,13 +2,13 @@
 {
     public static partial class Prelude
     {
-        public static UnitValue Unit =>
-            UnitValue.Default;
+        public static Unit unit =>
+            Unit.Default;
     }
 
-    public struct UnitValue
+    public struct Unit
     {
-        public static readonly UnitValue Default = new UnitValue();
+        public static readonly Unit Default = new Unit();
 
         public override string ToString() => "()";
     }

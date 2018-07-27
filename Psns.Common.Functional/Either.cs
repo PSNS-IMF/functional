@@ -31,10 +31,10 @@ namespace Psns.Common.Functional
                 t => binder(t).Try(),
                 e => new TryResult<R>(e));
 
-        public static UnitValue Match<L, R>(this Either<L, R> self, Action<R> right, Action<L> left) =>
+        public static Unit Match<L, R>(this Either<L, R> self, Action<R> right, Action<L> left) =>
             self.Match(
-                r => { right(r); return Unit; },
-                e => { left(e); return Unit; });
+                r => { right(r); return unit; },
+                e => { left(e); return unit; });
 
         public static IEnumerable<R> Rights<L, R>(this IEnumerable<Either<L, R>> self)
         {

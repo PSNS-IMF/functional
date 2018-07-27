@@ -51,22 +51,22 @@ namespace Psns.Common.Functional
         public static State<TValue, TState> State<TValue, TState>(Func<TState, (TValue, TState)> func) =>
             state => func(state);
 
-        public static State<UnitValue, TState> State<TState>(Action action) => state =>
+        public static State<Unit, TState> State<TState>(Action action) => state =>
         {
             action();
-            return (Unit, state);
+            return (default, state);
         };
 
-        public static State<UnitValue, TState> State<TState>() =>
-            Unit.State<UnitValue, TState>();
+        public static State<Unit, TState> State<TState>() =>
+            unit.State<Unit, TState>();
 
         public static State<TState, TState> GetState<TState>() => state =>
            (state, state);
 
-        public static State<TState, TState> SetState<TState>(TState newState) => oldState =>
-            (oldState, newState);
+        public static State<Unit, TState> SetState<TState>(TState newState) => oldState =>
+            (unit, newState);
 
-        public static State<UnitValue, TState> SetState<TState>(Func<TState, TState> newState) => oldState =>
-            (Unit, newState(oldState));
+        public static State<Unit, TState> SetState<TState>(Func<TState, TState> newState) => oldState =>
+            (unit, newState(oldState));
     }
 }

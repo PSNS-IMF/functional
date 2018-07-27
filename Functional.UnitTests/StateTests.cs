@@ -51,4 +51,41 @@ namespace SystemExtensions.UnitTests.Functional.StateUnitTests
             Expect(result.Value, EqualTo(3));
         }
     }
+
+    [TestFixture]
+    public class StopLightSimulation
+    {
+        delegate (string, ColorState) ColorState();
+
+        static ColorState RedState = () =>
+            (nameof(RedState), () => GreenState());
+
+        static ColorState YellowState = () =>
+            (nameof(YellowState), () => RedState());
+
+        static ColorState GreenState = () =>
+            (nameof(GreenState), () => YellowState());
+
+        static State<string, ColorState> machine() =>
+            State<string, ColorState>(state =>
+                map(
+                    state(), 
+                    s => (s.Item1, s.Item2)));
+
+        [Test] 
+        public void ItShouldProgressStatesCorrectly()
+        {
+            var query =
+                from fst in machine()
+                from sec in machine()
+                select sec;
+
+            var from = fun((ColorState starting) =>
+                query(starting).State().Item1);
+
+            Expect(
+                (from(GreenState), from(YellowState), from(RedState)), 
+                EqualTo((nameof(RedState), nameof(GreenState), nameof(YellowState))));
+        }
+    }
 }

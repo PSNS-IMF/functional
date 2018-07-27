@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,12 +14,12 @@ namespace Psns.Common.Functional
                 || (Nullable.GetUnderlyingType(typeof(T)) != null && value.Equals(default(T)));
 
         public static bool IsDefault<T>(T value) =>
-            EqualityComparer<T>.Default.Equals(value, default(T));
+            EqualityComparer<T>.Default.Equals(value, default);
 
         public static R map<T, R>(T value, Func<T, R> map) =>
             map(value);
 
-        public static R map<T, R>(T value, Action<T> with, R res = default(R))
+        public static R map<T, R>(T value, Action<T> with, R res = default)
         {
             if (value != null)
                 with(value);
@@ -67,7 +68,7 @@ namespace Psns.Common.Functional
                 {
                     return possible.Match(
                         some: r => r, 
-                        none: () => default(R));
+                        none: () => default);
                 }
             }
 
@@ -143,5 +144,33 @@ namespace Psns.Common.Functional
 
         public static IEnumerable<int> range(int start, int count) =>
             Enumerable.Range(start, count);
+
+        /// <summary>
+        /// Caches the result of <paramref name="self"/> so that it is only executed once.
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        /// <remarks>Threadsafe</remarks>
+        public static Func<A, B> Memo<A, B>(this Func<A, B> self) =>
+            self.MemoRead().Item1;
+
+        /// <summary>
+        /// Caches the result of <paramref name="self"/> so that it is only executed once.
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <param name="self"></param>
+        /// <returns>A tuple of the new caching function as well as
+        /// a function that returns the last calculated value.</returns>
+        public static (Func<A, B>, Func<B>) MemoRead<A, B>(this Func<A, B> self)
+        {
+            var store = new ConcurrentDictionary<A, Lazy<B>>();
+
+            return (
+                a => store.GetOrAdd(a, new Lazy<B>(() => self(a))).Value,
+                () => store.LastOrDefault().Value.Value);
+        }
     }
 }
