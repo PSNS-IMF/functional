@@ -13,6 +13,11 @@ namespace Psns.Common.Functional
         public static State<TValue, TState> State<TValue, TState>(this TValue self, Func<TState, TState> newState) =>
             oldState => (self, newState(oldState));
 
+        public static State<TResult, TState> Append<TValue, TResult, TState>(
+            this State<TValue, TState> self,
+            State<TResult, TState> next) => state =>
+                map(self(state), res => next(res.State));
+
         public static State<TValue, TState> Bind<TValue, TState>(
             this State<TValue, TState> self,
             Func<TValue, State<TValue, TState>> binder) =>

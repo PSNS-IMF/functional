@@ -8,6 +8,10 @@
     <licenseUrl>https://github.com/PSNS-IMF/functional/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/PSNS-IMF/functional</projectUrl>
     <releaseNotes>
+      ## 2.0.0.1
+      ### Features
+      * Don't require System.Collections.Concurrent to support NET45.
+
       ## 2.0.0.0
       ### Features
       * Adding memoization functions
@@ -46,10 +50,9 @@
     <description>Contains some functional helpers methods and Monads</description>
     <tags>Functional Monads PSNS</tags>
     <dependencies>
-      <group targetFramework=".NETStandard1.3">
+      <group targetFramework=".NETStandard1.0">
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
         <dependency id="System.ValueTuple" version="4.5.0" exclude="Build,Analyzers" />
-        <dependency id="System.Collections.Concurrent" version="4.3.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

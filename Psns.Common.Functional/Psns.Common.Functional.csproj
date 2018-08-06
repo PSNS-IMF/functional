@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <LangVersion>7.1</LangVersion>
-    <TargetFrameworks>netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Functional Monads PSNS</PackageTags>
@@ -10,8 +10,8 @@
     <PackageProjectUrl>https://github.com/PSNS-IMF/functional</PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <Description>Contains some functional helpers methods and Monads</Description>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+    <AssemblyVersion>2.0.0.1</AssemblyVersion>
+    <FileVersion>2.0.0.1</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <PackageReference Include="Psns.Common.Build.GithubTemplate" Version="1.0.0.6" />
-    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
