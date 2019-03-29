@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+
 using static Psns.Common.Functional.Prelude;
 
 namespace Psns.Common.Functional
@@ -121,6 +123,11 @@ namespace Psns.Common.Functional
     {
         public static Unit Match<T>(this Maybe<T> self, Action<T> some, Action none) =>
             self.Match(t => { some(t); return unit; }, () => { none(); return unit; });
+
+        public static async Task<R> MatchAsync<T, R>(this Maybe<T> maybe, Func<T, Task<R>> some, Func<R> none) =>
+            await maybe.Match(
+                async t => await some(t),
+                () => none().AsTask());
 
         public static Maybe<R> Map<T, R>(this Maybe<T> self, Func<T, R> mapper) =>
             self.Match(

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+
 using static Psns.Common.Functional.Prelude;
 
 namespace Psns.Common.Functional
@@ -114,6 +115,7 @@ namespace Psns.Common.Functional
         /// Executes binder function even if self fails.
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <typeparam name="R"></typeparam>
         /// <param name="self"></param>
         /// <param name="binder"></param>
         /// <returns>
@@ -249,9 +251,14 @@ namespace Psns.Common.Functional
                 success: t => t,
                 fail: ex => Left<Exception, T>(ex));
 
-        public static Task<Either<Exception, T>> ToEither<T>(this TryAsync<T> self) =>
-            self.Match(
+        public static async Task<Either<Exception, T>> ToEither<T>(this TryAsync<T> self) =>
+            await self.Match(
                 val => Right<Exception, T>(val),
                 e => e);
+
+        public static async Task<Either<Exception, T>> ToEither<T>(this Try<Task<T>> self) =>
+            await self.Match(
+                success: async t => (await t).Ok(),
+                fail: ex => Error<T>(ex).AsTask());
     }
 }

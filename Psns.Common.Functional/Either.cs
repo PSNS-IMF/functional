@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Psns.Common.Functional
@@ -31,10 +32,30 @@ namespace Psns.Common.Functional
                 t => binder(t).Try(),
                 e => new TryResult<R>(e));
 
+        public static async Task<Either<L, Ret>> BindAsync<L, R, Ret>(this Task<Either<L, R>> either, Func<R, Task<Either<L, Ret>>> binder) =>
+            await (await either).Match(
+                async r => await binder(r),
+                l => Left<L, Ret>(l).AsTask());
+
+        public static async Task<Either<L, Ret>> BindAsync<L, R, Ret>(this Either<L, Task<R>> either, Func<R, Either<L, Ret>> binder) =>
+            await either.Match(
+                async r => binder(await r),
+                l => Left<L, Ret>(l).AsTask());
+
+        public static async Task<Either<L, Ret>> BindAsync<L, R, Ret>(this Task<Either<L, R>> either, Func<R, Ret> binder) =>
+            (await either).Match(
+                r => binder(r),
+                l => Left<L, Ret>(l));
+
         public static Unit Match<L, R>(this Either<L, R> self, Action<R> right, Action<L> left) =>
             self.Match(
                 r => { right(r); return unit; },
                 e => { left(e); return unit; });
+
+        public static async Task<Ret> MatchAsync<L, R, Ret>(this Task<Either<L, R>> either, Func<R, Ret> right, Func<L, Ret> left) =>
+            (await either).Match(
+                r => right(r),
+                l => left(l));
 
         public static IEnumerable<R> Rights<L, R>(this IEnumerable<Either<L, R>> self)
         {
@@ -44,8 +65,28 @@ namespace Psns.Common.Functional
                 {
                     yield return either.Match(
                         right: r => r,
-                        left: l => default(R));
+                        left: l => default);
                 }
+            }
+        }
+
+        public static IEnumerable<Either<L, R>> Rights<L, R>(this IEnumerable<Either<L, R>> eithers, Action<IEnumerable<L>> withLefts = null)
+        {
+            var rights = eithers.Rights();
+            var lefts = eithers.Lefts();
+
+            if (rights.Count() > 0)
+            {
+                if (withLefts != null && lefts.Count() > 0)
+                {
+                    withLefts(lefts);
+                }
+
+                return rights.Select(r => Right<L, R>(r));
+            }
+            else
+            {
+                return eithers;
             }
         }
 
@@ -56,7 +97,7 @@ namespace Psns.Common.Functional
                 if (either.IsLeft)
                 {
                     yield return either.Match(
-                        right: r => default(L),
+                        right: r => default,
                         left: l => l);
                 }
             }
@@ -96,7 +137,7 @@ namespace Psns.Common.Functional
             NullCheck(left, nameof(left));
 
             _left = left;
-            _right = default(R);
+            _right = default;
             _state = EitherState.Left;
         }
 
@@ -105,7 +146,7 @@ namespace Psns.Common.Functional
             NullCheck(right, nameof(right));
 
             _right = right;
-            _left = default(L);
+            _left = default;
             _state = EitherState.Right;
         }
 

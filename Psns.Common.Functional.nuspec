@@ -8,6 +8,10 @@
     <licenseUrl>https://github.com/PSNS-IMF/functional/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/PSNS-IMF/functional</projectUrl>
     <releaseNotes>
+      ## 2.0.0.2
+      ### Features
+      * Adding some async extensions
+
       ## 2.0.0.1
       ### Features
       * Don't require System.Collections.Concurrent to support NET45.
